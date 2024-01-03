@@ -9,7 +9,7 @@ import {ModelScreenNavigatorProps} from "./ModelContainer";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderDetail from "@/Components/header";
 import { useDispatch, useSelector } from "react-redux";
-import {  updateModel } from "@/Store/reducers/farm";
+import {  updateModel, setCurFarmModel } from "@/Store/reducers/farm";
 import { useLazyGetModelQuery, useUpdateFarmMutation } from "@/Services";
 
 const screenWidth = Dimensions.get('window').width;
@@ -28,7 +28,7 @@ export const Model= (props: {
     const [isConfirmationVisible, setConfirmationVisible] = useState(false); //Confirm delete UI
     const curFarm = useSelector((state) => state.farm.selectedFarm);
     const [curModel, setCurModel] = useState({});
-    const activeModelId = useSelector((state) => state.farm.selectedFarm.model.id);
+    const activeModelId = useSelector((state ) => state.farm.selectedFarm.model?.id);
     // const curActiveModelId = useSelector((state) => state.farm.curModelId);
     const dispatch = useDispatch();
     const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] = useLazyGetModelQuery();
@@ -64,6 +64,7 @@ export const Model= (props: {
       // Handle confirmation delete water schedule logic here
       setConfirmationVisible(false);
       handleUpdateModel();
+      dispatch(setCurFarmModel(curModel))
       dispatch(updateModel(curModel));
     };
   

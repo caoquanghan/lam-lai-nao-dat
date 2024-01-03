@@ -62,7 +62,7 @@ const AddFarmScreen: FunctionComponent = () => {
     const inputPlant = useSelector((state) => state.farm.inputPlant);
     const inputLocation = useSelector((state) => state.farm.inputLocation);
     const inputAcraege = useSelector((state) => state.farm.inputAcraege);
-    const userId = useSelector((state) => state.user.id);
+    const userId = useSelector((state) => state.user);
     const [cultivarId, setCultivarId] = useState(-1);
     const [farmCreating, farmCreatingResult] = useCreateFarmMutation();
     const handleFarmNameChange = (e) => {
@@ -90,7 +90,7 @@ const AddFarmScreen: FunctionComponent = () => {
           cultivarId: `${cultivarId}`,
           image: "",
           modelID: "",
-          userId: userId,
+          userId: `${userId}`,
           modelId: "",
         };
   

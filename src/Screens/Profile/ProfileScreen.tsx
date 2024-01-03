@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import styled from "styled-components/native";
 
@@ -18,8 +18,10 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/Navigation";
 import { RootScreens } from "..";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLazyGetUserQuery } from "@/Services";
+import { deleteProfile, updateName } from "@/Store/reducers/profile";
 const ProfileScreenContainer = styled(Container)`
   width: 100%;
   flex: 1;
@@ -62,14 +64,38 @@ const Circle = styled.View`
 const ProfileScreen: FunctionComponent = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const profile = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+  const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] = useLazyGetUserQuery();
+  const handleFetch = async () => {
+    await fetchOne(profile.id);
+  }
+  useEffect(() => {
+    handleFetch();
+    if (isSuccess) {
+      dispatch(updateName({ firstName: data.firstName, lastName: data.lastName }));
+    }
+  }, [isSuccess]);
+
+  if(isFetching){
+    return <View></View>
+  }
   const handleLogout = async () => {
     // Remove the JWT from AsyncStorage
     await AsyncStorage.removeItem('token');
+    dispatch(deleteProfile());
     // Navigate to the login page
-    navigation.navigate(RootScreens.HOME);
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name:RootScreens.LOGIN,
+        },
+      ],
+    });
   };
-  console.log(profile);
+
   return (
     <SafeAreaView
       style={{ flex: 1, width: "100%", backgroundColor: "#F9F9F9" }}
@@ -97,7 +123,7 @@ const ProfileScreen: FunctionComponent = () => {
               fontSize: 20,
             }}
           >
-            {profile.name}
+            {(profile.firstName? profile.firstName : "") + " " +(profile.lastName? profile.lastName : "")}
           </RegularText>
           </View>
           <FontAwesome
@@ -168,7 +194,7 @@ const ProfileScreen: FunctionComponent = () => {
               width: "30%",
             }}
           >
-            <Pressable onPress={()=>{navigation.navigate(RootScreens.LOGIN)}}>
+            <Pressable onPress={handleLogout}>
             <RegularText>Đăng xuất</RegularText>
             </Pressable>
           </Wrapper>

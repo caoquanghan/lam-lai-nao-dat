@@ -95,7 +95,7 @@ const LoginScreen= (props: {
             useremail: response.user.email}));
           
             dispatch(setUser(response.user.id));
-            console.log("farmuser",farmUser)
+
           // Navigate to the home page
           props.navigation.reset({
             index: 0,

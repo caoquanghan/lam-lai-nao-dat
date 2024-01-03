@@ -13,14 +13,10 @@ const userApi = API.injectEndpoints({
       query: (id) =>  `users/${id}`,
     }),
     updateUser: build.mutation({
-      query: ({id, fname, lname, email}) => ({
+      query: ({id, firstName, lastName, email}) => ({
         url: `users/${id}`,
         method: 'PATCH',
-        body: { 
-          'firstName': fname, 
-          'lastName': lname,
-          'email': email,
-        },
+        body: {firstName, lastName, email},
       }),
     })
   }),
@@ -28,4 +24,4 @@ const userApi = API.injectEndpoints({
 });
 
 
-export const { useGetUserQuery, useUpdateUserMutation } = userApi;
+export const { useLazyGetUserQuery, useUpdateUserMutation } = userApi;

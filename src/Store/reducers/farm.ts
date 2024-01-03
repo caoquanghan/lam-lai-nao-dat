@@ -1,44 +1,43 @@
 import { Schedule } from './../../Services/schedule/index';
-import { FarmListJson } from "@/Config";
+import { FarmListJson, scenario } from "@/Config";
 import { Farm } from "@/Services";
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 } from "uuid";
 const farmSlice = createSlice({
   name: "farmlist",
   initialState: { 
-    farmlist: [{}
-      // {
-      //   id: "",
-      //   name: "",
-      //   date: "",
-      //   model: {
-      //     id: "",
-      //     name: ""
-      //   },
-      //   plant: "",
-      //   location: "",
-      //   sche: [
-      //     {
-      //       id: "",
-      //       waterHour: "",
-      //       waterTime: "",
-      //       water: ""
-      //     },
-      //   ]
-      // }
-    ],
+    farmlist: [{}],
     user:"",
     inputFarmName: "",
     inputPlant: "",
     inputLocation: "",
     inputAcraege: "",
     selectedFarm: {},
-    farmSchedule: [{}],
+    curFarmSchedule: [{}],
     curSchedule:"",
-    curModelId: "",
+    curModel: {},
     curActiveModeId: "",
   },
   reducers: {
+    getCurFarmSchedule: (state, action) => {
+      action.payload.map((task)=> {
+        if(task.farmId) {
+          if(task.farmid === state.selectedFarm.id && state.curFarmSchedule.findIndex((scenario)=> scenario.id === task.id) === -1){
+            state.curFarmSchedule.push(task);  
+          }
+        }
+      })
+    },
+    deleteCurSchedule: (state, action) => {
+      const idxSche = state.curFarmSchedule.findIndex(
+        (task) => task.id === state.curSchedule
+      );
+      state.curFarmSchedule.splice(idxSche, 1);
+    },
+    addCurFarmSchedule: (state, action) => {
+      const newSchedule = action.payload;
+      state.curFarmSchedule.push(newSchedule);
+    },
     setUser: (state, action) => {
       state.user = action.payload;
     },
@@ -93,6 +92,9 @@ const farmSlice = createSlice({
     updateInputAcraege: (state, action) => {
       state.inputAcraege = action.payload;
     },
+    setCurFarmModel: (state, action) => {
+      state.curModel = action.payload;
+    },
     updateModel: (state, action) => {
       const idxTask = state.farmlist.findIndex(
         (task) => task.id == state.selectedFarm.id
@@ -135,7 +137,7 @@ const farmSlice = createSlice({
 });
 
 // export const { addFarm, clickFarm, updateInputAcraege, updateInputFarmName, updateInputLocation, updateInputPlant, updateModel, addSchedule, setCurSche, deleteSchedule, deleteFarm } = farmSlice.actions;
-export const {
+export const { getCurFarmSchedule, deleteCurSchedule, addCurFarmSchedule, deleteFarmList, setCurFarmModel,
   // getSelectedModelId,setModel, 
   setUser, updateFarmList, addFarm, clickFarm, updateInputAcraege, updateInputFarmName, updateInputLocation, updateInputPlant, updateModel, setCurSche, getSchedule, deleteSchedule, deleteFarm } = farmSlice.actions;
 export const farmReducers = farmSlice.reducer;

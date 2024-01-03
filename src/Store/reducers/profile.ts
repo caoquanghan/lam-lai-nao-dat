@@ -1,18 +1,14 @@
-import { FarmListJson } from "@/Config";
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 } from "uuid";
 const profileSlice = createSlice({
   name: "profile",
   initialState: { 
     token: "",
-    // user: {
         id: "",
         username: "",
-        // avatar: null,
         email: "",
-    //     role: "",
-    //     password: ""
-    // }
+        firstName: "",
+        lastName: "",
   },
   reducers: {
     addUser: (state, action) => {
@@ -22,14 +18,29 @@ const profileSlice = createSlice({
       state.email = action.payload.email;
       // state = action.payload;
   },
-    // editprofile: (state, action) => {
-    //     state.firstname = action.payload.firstname;
-    //     state.email = action.payload.email;
-    //     // state = action.payload;
-    // }
+  updateName: (state, action) => {
+    state.firstName = action.payload.firstName;
+    state.lastName = action.payload.lastName;
+    // state = action.payload;
+  },
+  deleteProfile: (state, action) => {
+    state.id = "";
+    state.token = "";
+    state.username = "";
+    state.email = "";
+    state.firstName = "";
+    state.lastName = "";
+    // state = action.payload;
+  },
+  updateUser: (state, action) => {
+    state.email = action.payload.email;
+    state.firstName = action.payload.firstName;
+    state.lastName = action.payload.lastName;
+    // state = action.payload;
+  },
   },
 });
 
-export const { addUser } = profileSlice.actions;
+export const { addUser, deleteProfile, updateName, updateUser } = profileSlice.actions;
 
 export const profileReducers = profileSlice.reducer;
