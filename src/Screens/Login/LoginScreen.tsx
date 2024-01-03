@@ -10,7 +10,7 @@ import RegularText from "@/Components/texts/RegularText";
 import { Pressable, TextInput } from "react-native";
 import MailIcon from "../../../assets/icon/MailIcon";
 import RegularButton from "@/Components/button/RegularButton";
-import { View } from "react-native";
+import { View, Text} from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { RootScreens } from "..";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
