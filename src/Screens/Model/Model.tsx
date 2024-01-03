@@ -24,6 +24,7 @@ export const Model= (props: {
   }) => {
     // const [modelstatus, setModelStatus] = useState(1);
     const [upModelReq,result] = useUpdateFarmMutation();
+
     const [isConfirmationVisible, setConfirmationVisible] = useState(false); //Confirm delete UI
     const curFarm = useSelector((state) => state.farm.selectedFarm);
     const [curModel, setCurModel] = useState({});
@@ -38,7 +39,7 @@ export const Model= (props: {
       handleFetch();
     }, [isSuccess]);
   
-    console.log(data);
+    // console.log(data);
   
     if(isFetching){
       return <View></View>
@@ -52,18 +53,18 @@ export const Model= (props: {
     const handleUpdateModel = async () => {
       const id= curFarm.id;
       const model= curModel.id;
-      await upModelReq(id,
-        model).unwrap( );
-      if(result.data){
-        dispatch(updateModel(curModel))
-        console.log(result.data);
-      }
+
+      await upModelReq({id, model}).unwrap();
+      
+      // if(result.isSuccess){
+      //   dispatch(updateModel(curModel))
+      // }
     }
     const handleConfirm= async () => {
       // Handle confirmation delete water schedule logic here
       setConfirmationVisible(false);
       handleUpdateModel();
-      dispatch(updateModel({curModel}));
+      dispatch(updateModel(curModel));
     };
   
     const handleCancel = () => {

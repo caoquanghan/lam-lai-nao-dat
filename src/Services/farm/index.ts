@@ -52,6 +52,7 @@ const farmApi = API.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+
         updateFarm: build.mutation({
             query: ({id, model}) => ({
                 url: `farms/${id}`,
@@ -59,6 +60,7 @@ const farmApi = API.injectEndpoints({
                 body: {model },
             }),
         }),
+        
     }),
     overrideExisting: true,
 });
